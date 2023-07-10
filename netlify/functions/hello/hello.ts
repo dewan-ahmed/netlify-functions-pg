@@ -1,47 +1,21 @@
-import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
+import { Handler } from '@netlify/functions';
+import axios from 'axios';
 
-import { Client } from 'pg';
+const handler: Handler = async (event) => {
+  try {
+    // Make a request to the OpenWeatherMap API
+    const apiKey = process.env.OPEN_WEATHER_API_KEY;
+    const city = 'London'; // Replace with your desired city
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
 
-const handler: Handler = async (event, context) => {
+    const response = await axios.get(url);
 
-    const pgUsername = process.env.pg_username;
-    const pgPassword = process.env.pg_password;
-    const pgHost = process.env.pg_host;
-    const pgPort = process.env.pg_port;
-    const pgDatabase = process.env.pg_database;
+    // Print the response data
+    console.log(response.data);
 
-    try {
-    // Set up the PostgreSQL connection
-    const client = new Client({
-        connectionString: `postgres://${pgUsername}:${pgPassword}@${pgHost}:${pgPort}/${pgDatabase}`,
-    });
-
-    await client.connect();
-
-    // Execute a query to fetch the version number
-    const result = await client.query('SELECT version()');
-    const versionNumber = result.rows[0].version;
-
-    // Create an HTML response
-    const htmlResponse = `
-      <html>
-        <head>
-          <title>PostgreSQL Version</title>
-        </head>
-        <body>
-          <h1>PostgreSQL Version</h1>
-          <p>Version number: ${versionNumber}</p>
-        </body>
-      </html>
-    `;
-
-    // Return the HTML response
     return {
       statusCode: 200,
-      headers: {
-        'Content-Type': 'text/html',
-      },
-      body: htmlResponse,
+      body: JSON.stringify(response.data),
     };
   } catch (error) {
     // Handle any errors that occur during the process
