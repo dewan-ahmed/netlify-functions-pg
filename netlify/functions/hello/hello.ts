@@ -22,13 +22,26 @@ const pg_database = process.env.PG_DATABASE;
     const result = await client.query('SELECT version()');
     const versionNumber = result.rows[0].version;
 
-    // Close the PostgreSQL connection
-    await client.end();
+    // Create an HTML response
+    const htmlResponse = `
+      <html>
+        <head>
+          <title>PostgreSQL Version</title>
+        </head>
+        <body>
+          <h1>PostgreSQL Version</h1>
+          <p>Version number: ${versionNumber}</p>
+        </body>
+      </html>
+    `;
 
-    // Return the version number as the response
+    // Return the HTML response
     return {
       statusCode: 200,
-      body: versionNumber,
+      headers: {
+        'Content-Type': 'text/html',
+      },
+      body: htmlResponse,
     };
   } catch (error) {
     // Handle any errors that occur during the process
