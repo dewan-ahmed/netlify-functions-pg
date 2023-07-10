@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@netlify/functions": "^1.6.0",
+    "pg": "^8.11.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.1"
+  }
+}
