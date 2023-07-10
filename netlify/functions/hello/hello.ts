@@ -4,16 +4,16 @@ import { Client } from 'pg';
 
 const handler: Handler = async (event, context) => {
 
-const pg_username = process.env.PG_USERNAME;
-const pg_password = process.env.PG_PASSWORD;
-const pg_host = process.env.PG_HOST;
-const pg_port = process.env.PG_PORT;
-const pg_database = process.env.PG_DATABASE;
+    const pgUsername = process.env.pg_username;
+    const pgPassword = process.env.pg_password;
+    const pgHost = process.env.pg_host;
+    const pgPort = process.env.pg_port;
+    const pgDatabase = process.env.pg_database;
 
     try {
     // Set up the PostgreSQL connection
     const client = new Client({
-      connectionString: 'postgres://${pg_username}:${pg_password}@${pg_host}:${pg_port}/${pg_database}',
+        connectionString: `postgres://${pgUsername}:${pgPassword}@${pgHost}:${pgPort}/${pgDatabase}`,
     });
 
     await client.connect();
